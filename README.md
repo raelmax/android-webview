@@ -7,7 +7,7 @@ A simple Android App generator to WebView based apps.
 
 ## Installing
 ```
-    $ pip install android-webview-template
+    $ pip install android-webview
 ```
 
 ## Create your app template

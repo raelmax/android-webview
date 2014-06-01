@@ -13,7 +13,6 @@ setup(
     scripts=['android-webview/android-webview.py'],
     package_data={
         'android-webview': ['templates/*'],
-    },
-    test_suite='tests.suite'
+    }
 )
 
