@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
+
+if os.system('which android') != 0:
+    sys.exit('Android SDK is not installed. :(')
 
 app_name = raw_input("App NAME: ")
 app_url = raw_input("App URL: ")
