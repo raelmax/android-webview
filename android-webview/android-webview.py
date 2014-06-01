@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
+import os
 
-# android create project --target 1 --name MyFirstApp --path MyFirstApp --activity MainActivity
-# --package com.example.myfirstapp
-
-app_name = raw_input("App Name: ")
+app_name = raw_input("App NAME: ")
 app_url = raw_input("App URL: ")
-package_name = raw_input("Package Name: ")
-target = raw_input("Target: ")
+app_path = raw_input("App PATH: ")
+app_package = raw_input("Package Name: ")
 
-print "#" * 100
-print "App Generated! Be happy!"
+os.system('android create project --target 1 --name {0} --path {1} --activity MainActivity \
+ --package {2}'.format(app_name, app_name, app_package))
