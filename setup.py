@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name='android-webview',
-    version='0.1',
+    version='0.1.1',
     description='Python script to generate android webview based apps',
     author='Rael Max',
     author_email='contato@raelmax.com',

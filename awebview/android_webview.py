@@ -51,6 +51,8 @@ def main():
     os.system('android create project --target 1 --name {0} --path {1} --activity MainActivity \
               --package {2}'.format(params['app_name'], params['app_name'], params['app_package']))
 
+    replace_templates(params)
+
     print '\n'
     print message('success', 'App generated! Open project on Eclipse and run! :)')
 
