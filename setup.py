@@ -13,6 +13,7 @@ setup(
         'console_scripts': [
             'android-webview = android_webview',
         ]
-    }
+    },
+    package_data={'templates': ['templates/*']}
 )
 
