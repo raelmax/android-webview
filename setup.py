@@ -9,11 +9,12 @@ setup(
     author='Rael Max',
     author_email='contato@raelmax.com',
     url='https://github.com/raelmax/android-webview',
+    packages=['awebview'],
+    package_data={'awebview': ['templates/*']},
     entry_points={
         'console_scripts': [
-            'android-webview = android_webview',
+            'android-webview = awebview.android_webview:main',
         ]
-    },
-    package_data={'templates': ['templates/*']}
+    }
 )
 
