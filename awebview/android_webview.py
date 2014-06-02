@@ -25,7 +25,7 @@ def main():
     os.system('android create project --target 1 --name {0} --path {1} --activity MainActivity \
               --package {2}'.format(app_name, app_name, app_package))
 
-# copy AndroidManifest.xml
+    # copy AndroidManifest.xml
     manifest = open(os.path.join(TEMPLATES_PATH, 'AndroidManifest.xml')).read()
     manifest_webview = manifest.replace('{{package_name}}', app_package)
 
@@ -33,7 +33,7 @@ def main():
     new_manifest.write(manifest_webview)
     new_manifest.close()
 
-# copy MainActivity.java
+    # copy MainActivity.java
     main_activity = open(os.path.join(TEMPLATES_PATH, 'MainActivity.java')).read()
     main_activity_webview = main_activity.replace('{{package_name}}', app_package)
     main_activity_webview = main_activity_webview.replace('{{app_url}}', app_url)
