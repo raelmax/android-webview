@@ -8,12 +8,12 @@ if os.system('which android') != 0:
     sys.exit('Android SDK is not installed. :(')
 
 
-def message(msgtype, text):
+def message(msgtype, text, example=''):
     MSG= {
         'success': '\033[92m{0}\033[0m',
-        'question': '\033[91m{0}\033[0m',
+        'question': '\033[91m{0}\033[0m {1}: ',
     }
-    return MSG[msgtype].format(text)
+    return MSG[msgtype].format(text, example)
 
 
 def get_template(name):
@@ -42,9 +42,9 @@ def replace_templates(params):
 
 def main():
     params = {}
-    params['app_name'] = raw_input(message('question', 'App NAME: '))
-    params['app_url'] = raw_input(message('question', 'App URL: '))
-    params['app_package'] = raw_input(message('question', 'Package Name: '))
+    params['app_name'] = raw_input(message('question', 'App name', '[myapp]'))
+    params['app_url'] = raw_input(message('question', 'App url', '[http://mobile.myapp.com]'))
+    params['app_package'] = raw_input(message('question', 'Java package name', '[com.myapp.mobile]'))
     params['package_dir'] = params['app_package'].replace('.', '/')
     print '\n'
 
