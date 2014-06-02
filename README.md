@@ -1,15 +1,23 @@
-# Android WebView Template
+# Android WebView
 
-A simple Android App generator to WebView based apps.
+A simple android app generator to webview based apps.
 
 ## Requirements
 - Android SDK installed and available on path.
 
-## Create your app template
+## Install
 ```
-    $ git clone git@github.com:raelmax/android-webview.git
-    $ cd android-webview
-    $ python android_webview.py
+    $ pip install android-webview
 ```
 
+## Create your app template
+```
+    $ android-webview 
+```
 Follow the steps and be happy! :)
+
+## ToDo
+- Validate parameters
+- Improve android 'target' versions
+- Added icon and app name without eclipse
+- Generate apk. :O
