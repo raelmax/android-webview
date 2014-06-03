@@ -39,6 +39,14 @@ def replace_templates(params):
     new_main_activity.write(main_activity_webview)
     new_main_activity.close()
 
+    # copy strings.xml
+    strings = open(get_template('strings.xml')).read()
+    strings_named = strings.replace('{{app_name}}', params['app_name'])
+
+    new_strings = open('{0}/res/values/strings.xml'.format(params['app_name']), 'w')
+    new_strings.write(strings_named)
+    new_strings.close()
+
 
 def main():
     params = {}
