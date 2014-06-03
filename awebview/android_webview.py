@@ -4,14 +4,19 @@ import sys
 from pkg_resources import Requirement, resource_filename
 
 
-if os.system('which android') != 0:
-    sys.exit('Android SDK is not installed. :(')
-
-
 MSG= {
     'green': '\033[92m{0}\033[0m',
     'red': '\033[91m{0}\033[0m',
 }
+PARAMS = {}
+
+
+if os.system('which android') != 0:
+    sys.exit('Android SDK is not installed. :(')
+
+
+if os.system('which convert') != 0:
+    print MSG['red'].format('ImageMagick not installed, are unable to generate icons. :(\n')
 
 
 def get_template(name):
@@ -19,60 +24,74 @@ def get_template(name):
     return os.path.join(TEMPLATES_PATH, name)
 
 
-def replace_templates(params):
+def replace_templates(PARAMS):
     # copy AndroidManifest.xml
     manifest = open(get_template('AndroidManifest.xml')).read()
-    manifest_webview = manifest.replace('{{package_name}}', params['app_package'])
+    manifest_webview = manifest.replace('{{package_name}}', PARAMS['app_package'])
 
-    new_manifest = open('{0}/AndroidManifest.xml'.format(params['app_name']), 'w')
+    new_manifest = open('{0}/AndroidManifest.xml'.format(PARAMS['app_name']), 'w')
     new_manifest.write(manifest_webview)
     new_manifest.close()
 
     # copy MainActivity.java
     main_activity = open(get_template('MainActivity.java')).read()
-    main_activity_webview = main_activity.replace('{{package_name}}', params['app_package'])
-    main_activity_webview = main_activity_webview.replace('{{app_url}}', params['app_url'])
+    main_activity_webview = main_activity.replace('{{package_name}}', PARAMS['app_package'])
+    main_activity_webview = main_activity_webview.replace('{{app_url}}', PARAMS['app_url'])
 
-    new_main_activity = open('{0}/src/{1}/MainActivity.java'.format(params['app_name'], params['package_dir']), 'w')
+    new_main_activity = open('{0}/src/{1}/MainActivity.java'.format(PARAMS['app_name'], PARAMS['package_dir']), 'w')
     new_main_activity.write(main_activity_webview)
     new_main_activity.close()
 
     # copy strings.xml
     strings = open(get_template('strings.xml')).read()
-    strings_named = strings.replace('{{app_name}}', params['app_name'])
+    strings_named = strings.replace('{{app_name}}', PARAMS['app_name'])
 
-    new_strings = open('{0}/res/values/strings.xml'.format(params['app_name']), 'w')
+    new_strings = open('{0}/res/values/strings.xml'.format(PARAMS['app_name']), 'w')
     new_strings.write(strings_named)
     new_strings.close()
 
 
-def make_icons(params):
-    print 'icon generated!'
+def make_icons(PARAMS):
+    SIZES = {
+        'ldpi': '36x36',
+        'mdpi': '48x48',
+        'hdpi': '72x72',
+        'xhdpi': '96x96'
+    }
+
+    print MSG['red'].format('Where are the image? '), '[/home/myuser/images/my-full-image.png]'
+    PARAMS['icon_path'] = raw_input('>>> ')
+
+    for k, v in SIZES.iteritems():
+        print MSG['red'].format('Generating {0} icon...'.format(k.upper()))
+        os.system('convert -background none {0} -resize {1} \
+                  {2}/res/drawable-{3}/ic_launcher.png'.format(PARAMS['icon_path'], v, PARAMS['app_name'], k))
+
+    print MSG['green'].format('\nIcons generated. :)')
 
 
 def main():
-    params = {}
     print MSG['red'].format('What\'s your app name? '), '[myapp]'
-    params['app_name'] = raw_input('>>> ')
+    PARAMS['app_name'] = raw_input('>>> ')
 
     print MSG['red'].format('What\'s your app url? '), '[http://mobile.myapp.com]'
-    params['app_url'] = raw_input('>>> ')
+    PARAMS['app_url'] = raw_input('>>> ')
 
     print MSG['red'].format('What\'s your java package name? '), '[com.myapp.mobile]'
-    params['app_package'] = raw_input('>>> ')
-    params['package_dir'] = params['app_package'].replace('.', '/')
+    PARAMS['app_package'] = raw_input('>>> ')
+    PARAMS['package_dir'] = PARAMS['app_package'].replace('.', '/')
     print '\n'
 
     os.system('android create project --target 1 --name {0} --path {1} --activity MainActivity \
-              --package {2}'.format(params['app_name'], params['app_name'], params['app_package']))
+              --package {2}'.format(PARAMS['app_name'], PARAMS['app_name'], PARAMS['app_package']))
 
-    replace_templates(params)
+    replace_templates(PARAMS)
 
     print MSG['red'].format('\nYour app are done. You want generate a icon to him? '), '[yes/no]'
-    params['make_icons'] = raw_input('>>> ')
+    PARAMS['make_icons'] = raw_input('>>> ')
 
-    if params['make_icons'] == 'yes':
-        make_icons(params)
+    if PARAMS['make_icons'] == 'yes':
+        make_icons(PARAMS)
     else:
         print MSG['green'].format('\nOk, we will use default android app icon. :)')
 
