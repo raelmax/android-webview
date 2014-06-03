@@ -8,7 +8,10 @@ MSG= {
     'green': '\033[92m{0}\033[0m',
     'red': '\033[91m{0}\033[0m',
 }
-PARAMS = {}
+
+PARAMS = {
+    'has_convert': True
+}
 
 
 if os.system('which android') != 0:
@@ -16,6 +19,7 @@ if os.system('which android') != 0:
 
 
 if os.system('which convert') != 0:
+    PARAMS['has_convert'] = False
     print MSG['red'].format('ImageMagick not installed, are unable to generate icons. :(\n')
 
 
@@ -24,7 +28,7 @@ def get_template(name):
     return os.path.join(TEMPLATES_PATH, name)
 
 
-def replace_templates(PARAMS):
+def replace_templates():
     # copy AndroidManifest.xml
     manifest = open(get_template('AndroidManifest.xml')).read()
     manifest_webview = manifest.replace('{{package_name}}', PARAMS['app_package'])
@@ -51,7 +55,7 @@ def replace_templates(PARAMS):
     new_strings.close()
 
 
-def make_icons(PARAMS):
+def make_icons():
     SIZES = {
         'ldpi': '36x36',
         'mdpi': '48x48',
@@ -85,15 +89,16 @@ def main():
     os.system('android create project --target 1 --name {0} --path {1} --activity MainActivity \
               --package {2}'.format(PARAMS['app_name'], PARAMS['app_name'], PARAMS['app_package']))
 
-    replace_templates(PARAMS)
+    replace_templates()
 
-    print MSG['red'].format('\nYour app are done. You want generate a icon to him? '), '[yes/no]'
-    PARAMS['make_icons'] = raw_input('>>> ')
+    if PARAMS['has_convert']:
+        print MSG['red'].format('\nYour app are done. You want generate a icon to him? '), '[yes/no]'
+        PARAMS['make_icons'] = raw_input('>>> ')
 
-    if PARAMS['make_icons'] == 'yes':
-        make_icons(PARAMS)
-    else:
-        print MSG['green'].format('\nOk, we will use default android app icon. :)')
+        if PARAMS['make_icons'] == 'yes':
+            make_icons()
+        else:
+            print MSG['green'].format('\nOk, we will use default android app icon. :)')
 
     print MSG['green'].format('\nApp generated! Open project on Eclipse and run! :)')
 
