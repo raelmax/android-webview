@@ -8,12 +8,10 @@ if os.system('which android') != 0:
     sys.exit('Android SDK is not installed. :(')
 
 
-def message(msgtype, text, example=''):
-    MSG= {
-        'success': '\033[92m{0}\033[0m',
-        'question': '\033[91m{0}\033[0m {1}: ',
-    }
-    return MSG[msgtype].format(text, example)
+MSG= {
+    'green': '\033[92m{0}\033[0m',
+    'red': '\033[91m{0}\033[0m',
+}
 
 
 def get_template(name):
@@ -48,11 +46,20 @@ def replace_templates(params):
     new_strings.close()
 
 
+def make_icons(params):
+    print 'icon generated!'
+
+
 def main():
     params = {}
-    params['app_name'] = raw_input(message('question', 'App name', '[myapp]'))
-    params['app_url'] = raw_input(message('question', 'App url', '[http://mobile.myapp.com]'))
-    params['app_package'] = raw_input(message('question', 'Java package name', '[com.myapp.mobile]'))
+    print MSG['red'].format('What\'s your app name? '), '[myapp]'
+    params['app_name'] = raw_input('>>> ')
+
+    print MSG['red'].format('What\'s your app url? '), '[http://mobile.myapp.com]'
+    params['app_url'] = raw_input('>>> ')
+
+    print MSG['red'].format('What\'s your java package name? '), '[com.myapp.mobile]'
+    params['app_package'] = raw_input('>>> ')
     params['package_dir'] = params['app_package'].replace('.', '/')
     print '\n'
 
@@ -61,8 +68,16 @@ def main():
 
     replace_templates(params)
 
-    print '\n'
-    print message('success', 'App generated! Open project on Eclipse and run! :)')
+    print MSG['red'].format('\nYour app are done. You want generate a icon to him? '), '[yes/no]'
+    params['make_icons'] = raw_input('>>> ')
+
+    if params['make_icons'] == 'yes':
+        make_icons(params)
+    else:
+        print MSG['green'].format('\nOk, we will use default android app icon. :)')
+
+    print MSG['green'].format('\nApp generated! Open project on Eclipse and run! :)')
+
 
 if __name__ == '__main__':
     main()
